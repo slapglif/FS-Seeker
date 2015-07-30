@@ -682,29 +682,9 @@ def stripe():
 
     return output
 
-@app.route("/stripe2", methods=['GET', 'POST'])
-def stripe2():
-    stripe.api_key = stripe_keys['secret_key']
-    form = stripeform()
-    output = render_template('stripe.html', key=stripe_keys['publishable_key'], form=form)
-    if form.amount.data:
 
-        stripe.api_key = "sk_live_GFHD3hslyrBiTy9I2HCEIP7y"
-        customer = Customer.create(
-            email= request.form.get('email'),
-            card=request.form['stripeToken']
-        )
 
-        charge = Charge.create(
-            customer=customer.id,
-            amount=request.form.get('data-amount') * 100,
-            currency='usd',
-            description='xTcR Donation'
-        )
 
-        output = redirect("http://join.xtcr.net/success")
-
-    return output
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
