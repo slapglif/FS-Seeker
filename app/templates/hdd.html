@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+    <script>
+
+                                    $.getJSON("http://seeker.freebieservers.com/api/ServStats", function (servers) {
+
+                                    $("#server-container").data("json_data", servers);
+
+                                    for (var i = 0; i < servers.length; i++) {
+                                        $.get("/servers?json=" + encodeURIComponent(JSON.stringify(servers[i])), function (html) {
+                                            $("#server-container").append(html);
+                                        });
+                                    }
+                                });
+    </script>
+
+
+  <section id="main-content" xmlns="http://www.w3.org/1999/html">
+          <section class="wrapper">
+
+              <div class="row">
+                  <div class="col-lg-10 main-chart">
+
+
+
+        <div class="row">
+
+            <h1 class="text-center margin-top-60 margin-bottom-30"><span class="text-info">HDD</span> Management</h1>
+    <p class="text-center lead text-gray margin-bottom-45">
+        Chose a server blow to assign as the primary to which all new users are allocated<br>
+    </p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+            <div class="col-md-2 col-sm-2 box0" style=""></div>
+                    <div id="server-container" class=""></div>
+            </div>
+
+
+
+{#                         {% for server in servers %}#}
+{#                  		<div class="col-md-3 col-sm-3 box0">#}
+{#                        <a href="/hdd/{{ server['data']['id'] }}">#}
+{#                  			<div class="box1">#}
+{##}
+{#					  			<span class="fa fa-database"></span>#}
+{#					  			<h3><label class="{% if server['result']['online'] == True %}label label-success{% else %}label label-danger{% endif %}">{{ server['data']['name'] }}</label></h3>#}
+{#                  			</div>#}
+{#                        </a>#}
+{#					  			<p>{% if server['result']['online'] == True %}Server Online{% else %}Can not reach FBShellhost.exe{% endif %}</p>#}
+{#                  		</div>#}
+{#						{% endfor %}#}
+{#                          		<div class="col-md-3 col-sm-3 box0">#}
+{#                        <a href="/hdd/3">#}
+{#                  			<div class="box1">#}
+{##}
+{#					  			<span class="fa fa-database"></span>#}
+{#					  			<h3><label class="label label-success">Random Server</label></h3>#}
+{#                  			</div>#}
+{#                        </a>#}
+{#					  			<p>Random</p>#}
+{#                  		</div>#}
+{#        </div>#}
+
+
+
+                              <p>&nbsp;</p>
+
+                       <br>
+                              <div align="center">
+                                <h1>Click below to prune inactive users</h1>
+                                <p>After clicking it the session will freeze, your free to leave the page</p>
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+                                  <a href="/hdd/seeker/go"><button class="btn btn-success">Prune Users</button></a>
+                          </div>
+
+
+
+
+{% endblock %}
