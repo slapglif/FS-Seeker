@@ -672,7 +672,7 @@ def stripe():
              'item_number': str(request.form['item_number'])
         }
 
-        r = requests.post("http://192.210.138.77/index.php?app=donate&do=payment&gateway=1", data=cb_data)
+        r = requests.post("http://192.3.130.131/index.php?app=donate&do=payment&gateway=1", data=cb_data)
 
         print ' ----- '
         cmd("echo '%s' >> stripe.log"%r.text)
@@ -682,13 +682,29 @@ def stripe():
 
     return output
 
+@app.route("/stripe2", methods=['GET', 'POST'])
+def stripe2():
+    stripe.api_key = stripe_keys['secret_key']
+    form = stripeform()
+    output = render_template('stripe.html', key=stripe_keys['publishable_key'], form=form)
+    if form.amount.data:
 
-@app.route('/gcp')
-def gcp():
-    output = "fuck GCP"
+        stripe.api_key = "sk_live_GFHD3hslyrBiTy9I2HCEIP7y"
+        customer = Customer.create(
+            email= request.form.get('email'),
+            card=request.form['stripeToken']
+        )
+
+        charge = Charge.create(
+            customer=customer.id,
+            amount=request.form.get('data-amount') * 100,
+            currency='usd',
+            description='xTcR Donation'
+        )
+
+        output = render_template("charge.html",amount=form.amount.data)
 
     return output
-
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
