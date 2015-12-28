@@ -649,7 +649,7 @@ def stripe():
             description='xTcR Donation'
         )
 
-
+        amnt = form.amount.data * 100
         custom = '0'
         if request.form.has_key('custom'):
             custom = str(request.form['custom'])
@@ -673,6 +673,12 @@ def stripe():
         }
 
         r = requests.post("http://192.3.130.131/index.php?app=donate&do=payment&gateway=1", data=cb_data)
+        try:
+            r = requests.get("http://kc1.freebieservers.com/1/donate.php?name=%s&amount=%s"%(g.user.nickname,amnt))
+            print r
+            print r.url
+        except:
+            print "Server Down"
 
         print ' ----- '
         cmd("echo '%s' >> stripe.log"%r.text)
